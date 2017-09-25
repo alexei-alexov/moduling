@@ -25,11 +25,17 @@ def P(g):
         mult *= i
     return mult
 
+
+def inf_sum(func, accuracy=0.001):
+    res,
+    while
+
 def calculate(p=None):
     if not p:
         p = get_default_setting()
 
     h = (0, p['h1'], p['h2'])
+    h1, h2 = h[1], h[2]
     mu = p['mu']
     nu = p['nu']
 
@@ -63,3 +69,8 @@ def calculate(p=None):
         gen_base = base_p_generator(r, j, j-m+1)
         return sum(fact(j-i-1)*(h[r]**i)*next(gen_base) / (fj*(nu**i)) for i in xrange(j-m+1))
 
+    def get_p10(H1, H2):
+        ((mu + h1) / h1)
+        + sum(get_a(1, j) * (h1 + mu + j*v) / (h1 + j*v) for j in xrange(1, H1+1))
+        + sum((h1 + mu + j*v) / (h1 + j*v) * (get_a(1, j) - (h1*get_a(1, H2)*get_b(1, j, H1+1))) for j in xrange(H1+1, H2+1))
+        + ((h1*get_a(1, H2)) / (v + h1*get_b(1, H2, H1+1)))*( 1/(H1+1) + sum((get_b(2, j, H1+1)*(h2+mu+j*v)) / (h2 + j*v) for j in xrange(H1+2, H2+1+1)) + infinite_sum(for j in xrange(H2+2, )))#TODO
