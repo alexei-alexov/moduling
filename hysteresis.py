@@ -96,8 +96,43 @@ def calculate(p=None):
 
     for j in range(H1+1, H2+1):
         a = get_a(1,j)
+        p1[1][j] = (a - (h1*get_a(1, H2)*get_b(1, j, H1+1)) / (v+h1*get_b(H2, H1+1)))*p1[1][0]
+        p1[0][j] = (mu / (h1 + j*v))*p1[1][j]
 
-        p1[0][j] = (mu / (h1 + j*v))*()*p1[1][0]
+    p2_h1p1_shared = (get_a(1, H2)*h1*p1[1][0]) / ((H1+1)*(mu + h2 + (H1+1)*v)*(v + h1*get_b(1, H2, H1+1)))
+    p2[0][H1+1] = mu * p2_h1p1_shared
+    p2[1][H1+1] = (h2 + (H1+1)*v) * p2_h1p1_shared
+
+    for j in range(H1+2, H2+2):
+        p2[1][j] = (h1*get_a(1, H2)*get_b(2, j, H1+1)) / (v + h1*get_b(1, H2, H1+1))
+        p2[0][j] = (mu / (h2 + j*v)) * p2[1][j]
+
+    for j in range(H2+2, ...):
+        p2[1][j] = p1[1][0] * (get_a(2, j)*h1*get_a(1, H1)*get_b(2, H2+1, H1+1)) / (get_a(2, H2+1)*(v + h1*get_b(1, H2, H1+1)))
+        p2[0][j] = p2[1][j] * (mu / (h2 + j*v))
+
+    def L1(H1, H2):
+        return mu * sum(p1[1][j] for j in range(H2+1))
+
+    def L2(H1, H2):
+        return mu * inf_sum(H1+1, lambda j: p2[1][j])
+
+    def L3(H1, H2):
+        return h1*sum(p1[1][j] for j in range(H2+1)) + h2*inf_sum(H1+1, lambda j: p2[1][j])
+
+    def L4(H1, H2):
+        return h1*p1[c][H2] + (H1+1)*v*(p2[0][H1+1] + p2[1][H1+1])
+
+    def L5(H1, H2):
+        return v*(sum(j*p1[1][j] for j in range(1, H2+1)) + inf_sum(H1+1, lambda j: j*p2[1][j]))
+
+    def L(H1, H2):
+        return C1*L1(H1, H2) + C2*L2(H1, H2) - C3*L3(H1, H2) - C4*L4(H1, H2) - C5*L5(H1, H2)
+
+
+    for th1 in range(...):
+        for th2 in range(...):
+
 
 
 if __name__ == "__main__":
