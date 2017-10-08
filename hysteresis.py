@@ -37,7 +37,7 @@ def inf_sum(i, func, accuracy=0.00001, step=1):
     return res
 
 
-def calculate(p=None):
+def calculate(H1, H2, p=None):
     if not p:
         p = get_default_settings()
 
@@ -54,6 +54,8 @@ def calculate(p=None):
     C4 = p['c4']
     C5 = p['c5']
     v = p['v']
+
+    end = 100
 
     def get_base_p(r, j, to):
         """Return shared part for alpha and beta functions"""
@@ -84,8 +86,9 @@ def calculate(p=None):
             + inf_sum(H2+2, lambda j: ((h2 + mu + j*v)*get_a(2, j)*get_b(2, H2+1, H1+1) / (get_a(2, H2+1)*(h2 + j*v))))))
 
     H = 100
-    p1 = [[0,0] for _ in range(H2+1)]
-    p2 = [[0,0] for _ in range(H1, H+1)]
+    p1 = [[0 for _ in range(H2+1)] for _ in range(2)]
+    p2 = [[0 for _ in range(H1, end+1)] for _ in range(2)]
+
 
     p1[1][0] = get_p10(H1, H2)
     p1[0][0] = (mu / h1)*p1[1][0]
@@ -107,7 +110,7 @@ def calculate(p=None):
         p2[1][j] = (h1*get_a(1, H2)*get_b(2, j, H1+1)) / (v + h1*get_b(1, H2, H1+1))
         p2[0][j] = (mu / (h2 + j*v)) * p2[1][j]
 
-    for j in range(H2+2, ...):
+    for j in range(H2+2, end+1):
         p2[1][j] = p1[1][0] * (get_a(2, j)*h1*get_a(1, H1)*get_b(2, H2+1, H1+1)) / (get_a(2, H2+1)*(v + h1*get_b(1, H2, H1+1)))
         p2[0][j] = p2[1][j] * (mu / (h2 + j*v))
 
@@ -128,17 +131,18 @@ def calculate(p=None):
 
     def L(H1, H2):
         return C1*L1(H1, H2) + C2*L2(H1, H2) - C3*L3(H1, H2) - C4*L4(H1, H2) - C5*L5(H1, H2)
-
-
-    for th1 in range(...):
-        for th2 in range(...):
-
+    
+    return L(H1, H2)
 
 
 if __name__ == "__main__":
     print("Test run")
     print("Infinite sum.")
     sum_res = inf_sum(1, lambda j: 10/j)
-    print("Result: ", sum_res)
-    print(calculate())
+    end = 100
+    results = [[None]*end for _ in range(end)]
+    for th1 in range(end):
+        for th2 in range(th1+1):
+            result[th1][th2] = calculate(th1, th2)
+    print(result)
 

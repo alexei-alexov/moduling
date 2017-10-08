@@ -64,6 +64,23 @@ def get(method, start, end):
     """Return list of values generator by given method"""
     return [next(method) for i in range(end) if i >= start]
 
+
+class Generator(object):
+    """Generate pseudo-random number"""
+
+    def __init__(self, method, p):
+        self.method = method
+        self.p = float(p)
+
+    def next(self):
+        """Return number from 0 to 1"""
+        return next(self.method) / self.p
+
+    def range(self, s, e):
+        """Return number in given range"""
+        return int(s + self.next() * (e - s))
+
+
 if __name__ == "__main__":
     print("Congruential check:")
     c = congruential(666, get_prime(2**32), get_prime(2**16), get_prime(2**4))
@@ -73,10 +90,12 @@ if __name__ == "__main__":
     a = get_prime(d-1)
     c = get_prime(a-1)
     m = get_prime(get_prime(2**32)-1)
-    result = get(quad_congruential(d, m, d, a, c), 0, 2000)
+    result = get(quad_congruential(d, m, d, a, c), 0, 20)
     print("Sqare congruential check\nResult: ", result, "\n")
     print("Let's check collision... result size: {} and set size: {}\n".format(len(result), len(set(result))))
-
-
+    print("Generator test")
+    g = Generator(quad_congruential(d, m, d, a, c), m)
+    for i in range(50):
+        print("I:{}\nNext: {}\nRange: {}".format(i, g.next(), g.range(i, i+10)))
 
 
