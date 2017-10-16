@@ -79,7 +79,12 @@ if __name__ == "__main__":
 #        (Generator(reverse_congruential(1, qm, qc, qa), qm), "Reverse congruential method"),
     )
     m = int(input("Enter amount of points: "))
-    for method, name in methods:
-        area = calculate(method, Polygon(p), (xs, ys), m)
-        print("{1}. Area: {0}".format(area, name))
+    tries = int(input("Enter amount of tries: "))
+    results = [[] for _ in range(len(methods))]
+    for tries in range(tries):
+        for num, (method, name) in enumerate(methods):
+            results[num].append(calculate(method, Polygon(p), (xs, ys), m))
+
+    for num, (method, name) in enumerate(methods):
+        print("{}. Area: {}".format(name, sum(results[num]) / tries))
 
